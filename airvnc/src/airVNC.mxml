@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="fvnc.*" xmlns:comp="components.*" 
+	applicationComplete="init()" width="800" height="600" resize="resizeHandler()" windowResize="resizeHandler()"
+	xmlns:view="net.alexanderadam.airvnc.view.*"
+	xmlns:control="net.alexanderadam.airvnc.control.*"
+	xmlns:business="net.alexanderadam.airvnc.business.*"
+	showStatusBar="false"
+	showTitleBar="false"
+	showFlexChrome="false"
+	>
+	
+	<mx:Style source="styles/newlook.css"/>
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.cairngorm.model.ModelLocator;
+			import net.alexanderadam.airvnc.model.ViewModelLocator;
+			import net.alexanderadam.airvnc.events.LoadDataEvent;
+			import net.alexanderadam.airvnc.events.ResizeWindowEvent;
+			import mx.events.ResizeEvent;
+			import mx.messaging.AbstractConsumer;
+			import mx.containers.Panel;
+			
+			import mx.rpc.events.ResultEvent;
+			import fvnc.FVNC;
+			import mx.controls.Image;
+			import components.*
+			import net.alexanderadam.airvnc.*;
+			
+			include 'ApplicationUpdate.as';
+			
+			private var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
+			
+			private function init():void {
+				startUpdater();
+				
+				//temXML.send();
+				var ld:LoadDataEvent = new LoadDataEvent();
+				ld.dispatch();
+				
+				// start in fullscreen mode
+				//stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			}
+			
+			private function resizeHandler():void {
+				if(modelLocator.itemsadded) {
+					var re:ResizeWindowEvent = new ResizeWindowEvent();
+					re.dispatch();
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- Cairngorm FrontController and ServiceLocator -->
+	<control:MainController id="controller" />
+	<business:Services id="services" />
+	
+	<view:Main  backgroundColor="#676767"/>
+	
+</mx:WindowedApplication>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:ac="com.adobe.ac.*" xmlns:view="net.alexanderadam.airvnc.view.*" mouseDown="startMove()">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+		
+			import net.alexanderadam.airvnc.model.ViewModelLocator;
+			import net.alexanderadam.airvnc.helper.Encryption;
+			import mx.controls.Alert;			
+		
+			[Bindable]
+			public var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
+			
+			private function updateList(value:XML):void {
+				trace('updateList called');
+				if(modelLocator.itemsadded) {
+					for each (var item:Object in value.Connection) {
+						var vnc:VNCPanel;
+						if(item.@type.toString() == 'thumb') {
+							vnc = new VNCThumbnailPanel();
+						} else if(item.@type.toString() == 'live') {
+							vnc = new VNCLivePanel();
+						} else {
+							Alert.show('Invalid Type!');
+							continue;
+						}
+						item
+						
+						vnc.password = Encryption.decrypt(item.@Password.toString(), modelLocator.key);
+						vnc.host = item.@Host.toString();
+						vnc.initialize();
+						//vnc.addEventListener('VNCConnected', showImage);
+						itemlist.addChild(vnc);
+					}
+					
+					modelLocator.resized = true;
+				}
+			}
+			
+			private function resizeItems():void {
+				if(modelLocator.itemsadded) {
+					trace('resizing items');
+					var x:int = itemlist.getChildren().length;
+					
+					var potenz:int = 1;
+					
+					while ((potenz*potenz) < x) {
+					    potenz++;
+					}
+					
+					trace('potenz: '+potenz);
+					trace('total: ' + itemlist.width);
+					var newwidth:int = Math.round((itemlist.width-(potenz*15))/potenz);
+					trace('item: ' + newwidth);
+					
+					var newheight:int = Math.round(((itemlist.height-(potenz*10))/potenz))
+					
+					itemlist.tileWidth = newwidth;
+					//itemlist.tileHeight = Math.round(newwidth/(4/3));
+					
+					itemlist.tileHeight = newheight;
+					//itemlist.tileWidth = Math.round((newheight*4)/3);
+					
+					trace('height: ' + itemlist.tileHeight);
+					trace('width: ' + itemlist.tileWidth);
+					
+					modelLocator.resized = false;
+				}
+			}
+			
+			public function startMove():void {
+            	stage.nativeWindow.startMove();
+            }
+		]]>
+	</mx:Script>
+	
+	<ac:Observe source="{modelLocator.itemlist}" handler="{updateList}" />
+	<ac:ObserveValue source="{modelLocator.resized}" handler="{resizeItems}" value="{true}"/>
+
+	<mx:Canvas width="100%" height="50" id="bar" styleName="bar" doubleClick="Application.application.maximize()">
+		<mx:Button x="10" y="10" label="Close" click="{Application.application.close()}"/>
+	</mx:Canvas>
+	
+	<mx:Tile 
+		id="itemlist" paddingBottom="5" paddingLeft="5" direction="horizontal"
+		paddingRight="5" paddingTop="5" left="0" right="0" top="52" bottom="0" borderStyle="solid" borderColor="#000000" backgroundColor="#676767">
+	</mx:Tile>
+</mx:Canvas>
