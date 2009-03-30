@@ -32,9 +32,8 @@
 			private var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
 			
 			private function init():void {
-				startUpdater();
+				//startUpdater();
 				
-				//temXML.send();
 				var ld:LoadDataEvent = new LoadDataEvent();
 				ld.dispatch();
 				

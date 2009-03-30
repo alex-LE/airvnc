@@ -7,14 +7,14 @@ private var appUpdater:ApplicationUpdater = new ApplicationUpdater();
         	
 // ActionScript file
 private function startUpdater():void {
-	appUpdater.updateURL = 'http://10.1.142.15/~aadam/vncthumbnailviewer/updates/updateDescriptor.xml';
+	//appUpdater.updateURL = 'updates/updateDescriptor.xml';
 	appUpdater.delay = 1;
 	appUpdater.addEventListener(UpdateEvent.INITIALIZED, updaterInitialized);
 	appUpdater.addEventListener(StatusUpdateEvent.UPDATE_STATUS, updateStatusHandler);
 	appUpdater.addEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, updateStatusErrorHandler);
 	appUpdater.addEventListener(ErrorEvent.ERROR, onError);
 
-	appUpdater.initialize();
+	//appUpdater.initialize();
 }
 
 private function onError(ev:ErrorEvent):void{

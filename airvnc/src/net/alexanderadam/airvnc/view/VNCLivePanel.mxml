@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <comp:VNCPanel 
 	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resize()"
-	xmlns:ns1="fvnc.*" backgroundColor="#7C7C7C" rollOver="{actionpanel.visible = true}" rollOut="{actionpanel.visible = false}"
+	xmlns:ns1="fvnc.*" backgroundColor="#7C7C7C" rollOver="{actionpanel.visible = true;titlepanel.visible = true}" rollOut="{actionpanel.visible = false;titlepanel.visible = false}"
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
@@ -43,7 +43,7 @@
 				
 				vnc.host = this.host;
 				vnc.password = this.password;
-				//this.title = 'Live Session: ' + this.host;
+				titleCaption.text = 'Live Session: ' + this.host;
 				
 				vnc.connect();
 				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
@@ -163,11 +163,15 @@
     <mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
 	
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		
 		<ns1:FVNC 
 				id="vnc" left="0" right="0" fitToScreen="true" viewOnly="true" height="100%"
 				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" borderColor="#000000" borderThickness="1">
 		</ns1:FVNC>
-		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" alpha="0.7">
+		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
+			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
+		</mx:Canvas>
+		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" backgroundAlpha="0.6">
 			<mx:Button x="10" y="19" label="Disconnect" id="btnConnect" enabled="false" click="switchVNCStatus()"/>
 			<mx:Label x="106.5" y="1" id="lblVNCStatus" visible="true" text="disconnected"/>
 			<mx:Button x="214" y="19" label="Record" id="record_btn" click="recordVideo()"/>
