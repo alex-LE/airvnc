@@ -178,7 +178,7 @@
 	
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:Image id="thumb" left="0" right="0" height="100%" width="100%" top="0" toolTip="Click me to enable a remote session" click="startLiveSession()"/>
-		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#D2D2D2" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
+		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" alpha="0.7">
 			<mx:Label x="106.5" y="0" id="lblVNCStatus" text="disconnected"/>
 			<mx:HSlider x="101" y="15" id="timerInterval" width="183" minimum="5" maximum="120" value="10" snapInterval="1" change="changeTimer()"/>
 			<mx:Button x="10" y="19" label="Record" id="record_btn" click="recordVideo()"/>
