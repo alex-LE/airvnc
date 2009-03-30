@@ -1,0 +1,156 @@
+/* CSS file */
+
+Application {
+	fontFamily:Arial;
+	fontSize:11;
+	
+	/*make app window transparent*/
+	background-color:"";
+	background-image:"";
+	padding: 0px;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;    
+}
+
+/*
+Canvas {
+	backgroundColor:#1e1e1e;
+	backgroundGradientAlphas:1.0, 0.8; 
+	backgroundGradientColors:#1e1e1e, #1e1e1e;
+}
+*/
+Label {
+	fontFamily:Arial;
+	fontSize:11;
+	color: #1e1e1e;
+}
+
+Button {
+   cornerRadius: 0;
+   fillAlphas: 0.6, 0.85, 1, 1;
+   fillColors: #1e1e1e, #1e1e1e, #1e1e1e, #1e1e1e;
+   color: #ffc600;
+   textRollOverColor: #ffc600;
+   textSelectedColor: #101010;
+   borderColor: #1e1e1e;
+   themeColor: #ffc600;
+   fontFamily: Arial;   
+}
+
+.closeBtn {
+	fontSize: 8px;
+	padding-left:0px;
+	padding-top:0px;
+	padding-right:0px;
+	padding-bottom:0px;
+	fontWeight:bold;
+}
+
+/*
+ComboBox {
+   cornerRadius: 4;
+   borderColor: #999999;
+   fillColors: #cccccc, #cccccc, #ffffff, #eeeeee;
+   selectionColor: #7fcdfe;
+   rollOverColor: #aadeff;
+   textRollOverColor: #0b333c;
+   themeColor: #009dff;
+   fontFamily: Arial;
+}
+*/
+Panel {
+   borderColor: #5a5e61;
+   roundedBottomCorners: true;
+   dropShadowColor: #333333;
+   titleStyleName: "mypanelTitle";
+   
+}
+
+.mypanelTitle {
+   color: #ffc600;
+   fontFamily: Arial;
+   fontWeight: bold;
+}
+/*
+CheckBox {
+   fillAlphas: 1, 1, 1, 1;
+   fillColors: #1e1e1e, #1e1e1e, #ffffff, #eeeeee;
+   borderColor: #b7babc;
+   iconColor: #FFC600;
+   disabledIconColor: #333333;
+   color: #cc9900;
+   textSelectedColor: #FFC600;
+   textRollOverColor: #FFC600;
+   iconRollOverColor: #1e1e1e;
+   themeColor: #101010;
+   fontFamily: Arial;
+   fontSize: 11;
+}
+
+
+Legend{
+    color: #ffc600;
+}
+
+TabNavigator {
+   tabHeight: 30;
+   horizontalGap: 1;
+   cornerRadius: 4;
+   tabOffset: 7;
+   borderColor: #1e1e1e;
+   color: #101010;
+   dropShadowEnabled: true;
+   tabStyleName: "myTabs";
+   firstTabStyleName: "myTabs";
+   lastTabStyleName: "myTabs";
+   selectedTabTextStyleName: "mySelectedTabs";
+    themeColor: #ffc600;
+}
+*/
+.myHeader {
+    textAlign:center;
+}
+
+.myTabs {
+   cornerRadius: 0;
+   fillAlphas: 0.8, 0.87;
+   fillColors: #1e1e1e, #1e1e1e;
+   borderColor: #1e1e1e;
+   color: #ffc600;
+   textRollOverColor: #ffc600;
+   themeColor: #ffc600;
+   fontFamily: Arial;
+   fontSize: 12;
+}
+
+.mySelectedTabs {
+   color: #333333;
+   textRollOverColor: #333333;
+   fontFamily: Arial;
+   fontSize: 12;
+}
+
+Label.largeLable
+{
+    color: #FFC600;
+    fontSize: 16;
+}
+
+VNCPanel {
+	borderThicknessLeft: 0;
+	borderThicknessTop: 0;
+	borderThicknessBottom: 0;
+	borderThicknessRight: 0;
+	headerHeight: 0; 
+}
+
+Canvas.bar
+{
+	background-image : Embed("assets/bar.png");
+	background-repeat: repeat;
+	borderSkin: ClassReference("com.degrafa.skins.CSSSkin");
+}
+        
+

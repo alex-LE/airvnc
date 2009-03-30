@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comp:VNCPanel 
+	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resize()"
+	xmlns:ns1="fvnc.*" rollOver="{actionpanel.visible = true}" rollOut="{actionpanel.visible = false}"
+	creationComplete="init()" backgroundColor="#7C7C7C">
+	
+	<mx:Script>
+		<![CDATA[
+			import fvnc.errors.ConnectionError;
+			import mx.events.AIREvent;
+			import mx.core.Window;
+			import mx.containers.Panel;
+			import fvnc.FVNC;
+			import mx.controls.Alert;
+			import tw.helpers.flv.SimpleFlvWriter;
+			import fvnc.rfb.constants.ProtocolState;
+			
+			//instantiating our flv writer
+			private var myWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
+			//our interval to record the feed from our webcam
+			private var recordInterval:uint;
+			//reference to our current video file
+			private var curVidFile:File;
+			
+			private var connected:Boolean;
+			private var videoWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
+			
+			private var videoWidth:uint = 640;
+			private var videoHeight:uint = 480;
+			
+			private var vnc:FVNC;
+			private var reloadTimer:Timer;
+			
+			private var rec:Rectangle;
+			
+			private function init():void {
+				if(host == '' || password == '') {
+					Alert.show('Host or password not set!');
+					return;
+				}
+				lblVNCStatus.text = 'loading ...';
+				lblVNCStatus.setStyle('color', 0x01CF00);
+				
+				vnc = new FVNC();
+				vnc.viewOnly = true;
+				vnc.host = this.host;
+				vnc.password = this.password;
+				vnc.fitToScreen = true;
+				vnc.height = 225;
+				vnc.width = 300;
+				vnc.initialize();
+				vnc.connect();
+				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+				
+				//this.title = 'Thumbnail Session: ' + this.host;
+				
+				
+				
+				reloadTimer = new Timer(10000);
+				reloadTimer.addEventListener(TimerEvent.TIMER, reload);
+				reloadTimer.start();
+			}
+			
+			private function resize():void {
+				reload(new Event(TimerEvent.TIMER));
+			}
+			
+			private function reload(e:Event):void {
+				lblVNCStatus.text = 'reloading ...';
+				lblVNCStatus.setStyle('color', 0x01CF00);
+				vnc = new FVNC();
+				vnc.viewOnly = true;
+				vnc.host = this.host;
+				vnc.password = this.password;
+				vnc.fitToScreen = true;
+				vnc.height = 225;
+				vnc.width = 300;
+				vnc.addEventListener('VNCConnected', showImage);
+				vnc.initialize();
+				try {
+					vnc.connect();
+				} catch (err:Error) {
+					var ev:IOErrorEvent = new IOErrorEvent(IOErrorEvent.IO_ERROR);
+					ev.text = err.message;
+					handleIOError(ev);
+				}
+				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+			}
+			
+			private function handleIOError(event:IOErrorEvent):void {
+				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
+				{
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				else
+				{
+					trace( event.text );
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				event.stopImmediatePropagation();
+			}
+			
+			private function showImage(e:Event):void {
+				var vnc:FVNC = e.target as FVNC;
+				thumb.data = vnc.getScreenImage();
+				lblVNCStatus.text = 'loaded';
+				rec = vnc.getScreenBounds();
+				vnc.close();
+			}
+			
+			private function changeTimer():void {
+				reloadTimer.delay = timerInterval.value * 1000;
+			}
+			
+			private function startLiveSession():void {
+				// stop timer
+				reloadTimer.stop();
+				
+				// create window
+				var livesession:Window = new Window();
+				livesession.title = 'Live Session';
+				livesession.open();
+				livesession.maximize();
+				livesession.addEventListener(Event.CLOSE, function():void {
+					reloadTimer.start();
+				});
+				
+				// add vnc viewer
+				var livevnc:FVNC = new FVNC();
+				livesession.addChild(livevnc);
+				livevnc.host = this.host;
+				livevnc.password = this.password;
+				livevnc.fitToScreen = true;
+				livevnc.percentWidth = 100;
+				livevnc.percentHeight = 100;
+				livevnc.connect();
+			}
+			
+			private function recordVideo():void {
+				if(record_btn.label == "Record"){
+					
+					curVidFile = File.createTempFile();
+					myWriter.createFile(curVidFile,  videoWidth,videoHeight, 2);
+					recordInterval = setInterval(recordVid, 100);
+					record_btn.label = "Stop";
+					
+				}else{
+					
+					clearInterval(recordInterval);
+					myWriter.closeFile();
+					var pat:RegExp = /\./g;
+					var newFileNameStr:String = this.host + '_' + new Date().getTime().toString() + '.flv';//curVidFile.name.split(".tmp").join(".flv");
+					var desFile:File = new File(File.desktopDirectory.nativePath +"\\" + newFileNameStr);
+					curVidFile.copyTo(desFile);
+					record_btn.label = "Record";
+				}
+			}
+			
+			private function recordVid():void {
+				var m:Matrix = new Matrix();
+			 	var sx:Number =  videoWidth / rec.width;
+			  	var sy:Number = videoHeight / rec.height;
+			 	m.scale(sx, sy);
+				
+				var snapshot:BitmapData = new BitmapData(videoWidth, videoHeight, true);
+				snapshot.draw(thumb.data as Bitmap, m);
+				myWriter.saveFrame( snapshot );
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Fade id="fadeOut" duration="800" alphaFrom="1.0" alphaTo="0.0"/>
+    <mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
+	
+	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		<mx:Image id="thumb" left="0" right="0" height="100%" width="100%" top="0" toolTip="Click me to enable a remote session" click="startLiveSession()"/>
+		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#D2D2D2" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
+			<mx:Label x="106.5" y="0" id="lblVNCStatus" text="disconnected"/>
+			<mx:HSlider x="101" y="15" id="timerInterval" width="183" minimum="5" maximum="120" value="10" snapInterval="1" change="changeTimer()"/>
+			<mx:Button x="10" y="19" label="Record" id="record_btn" click="recordVideo()"/>
+			<mx:Label x="122.5" y="29" text="{'reload every ' + timerInterval.value + ' seconds'}" width="141.5"/>
+		</mx:Canvas>
+	</mx:Canvas>
+	
+</comp:VNCPanel>
