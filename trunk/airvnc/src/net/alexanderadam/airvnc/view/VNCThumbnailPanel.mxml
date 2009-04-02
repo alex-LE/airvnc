@@ -25,9 +25,6 @@
 			private var connected:Boolean;
 			private var videoWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
 			
-			private var videoWidth:uint = 640;
-			private var videoHeight:uint = 480;
-			
 			private var vnc:FVNC;
 			private var reloadTimer:Timer;
 			
@@ -169,6 +166,10 @@
 				var snapshot:BitmapData = new BitmapData(videoWidth, videoHeight, true);
 				snapshot.draw(thumb.data as Bitmap, m);
 				myWriter.saveFrame( snapshot );
+			}
+			
+			override public function resizeMe():void {
+				
 			}
 		]]>
 	</mx:Script>

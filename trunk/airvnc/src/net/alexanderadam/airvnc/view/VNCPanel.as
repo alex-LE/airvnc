@@ -11,10 +11,14 @@ package net.alexanderadam.airvnc.view
 		public var password:String;
 		public var actionpanel:Canvas;
 		
+		protected var videoWidth:uint = 640;
+		protected var videoHeight:uint = 480;
+		
 		public function VNCPanel()
 		{
 			super();
 		}
 		
+		public function resizeMe():void {}	
 	}
 }
