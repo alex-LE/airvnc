@@ -114,6 +114,7 @@
 	
 	<mx:Tile 
 		id="itemlist" paddingBottom="5" paddingLeft="5" direction="horizontal"
-		paddingRight="5" paddingTop="5" left="0" right="0" top="52" bottom="0" borderStyle="solid" borderColor="#000000" backgroundColor="#676767">
+		paddingRight="5" paddingTop="5" left="0" right="0" top="52" bottom="0" borderStyle="solid" borderColor="#000000" backgroundColor="#676767"
+		horizontalAlign="center" verticalAlign="middle">
 	</mx:Tile>
 </mx:Canvas>
