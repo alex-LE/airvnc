@@ -27,6 +27,8 @@ package net.alexanderadam.airvnc.model
 		public var resized:Boolean;
 		public var itemsadded:Boolean;
 		
+		public var isMaximized:Boolean = false;
+		
 		// key for password encryption
 		public var key:String = '545be77c7cbcf6b24eed68202763116c';
 	}

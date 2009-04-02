@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <comp:VNCPanel 
-	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resize()"
+	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
 	xmlns:ns1="fvnc.*" backgroundColor="#7C7C7C" rollOver="{actionpanel.visible = true;titlepanel.visible = true}" rollOut="{actionpanel.visible = false;titlepanel.visible = false}"
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.containers.Tile;
 			import tw.helpers.flv.SimpleFlvWriter;
 			import mx.controls.Alert;
 			import mx.core.Window;
@@ -20,13 +21,18 @@
 			private var connected:Boolean;
 			private var videoWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
 			
-			private var videoWidth:uint = 640;
-			private var videoHeight:uint = 480;
+			public var currentImageHeight:Number;
+			public var currentImageWidth:Number;
 			
-			private function resize():void {
+			public var tmpImageHeight:Number;
+			public var tmpImageWidth:Number;
+			
+			private var resized:Boolean;
+			
+			private function reconnect():void {
 				if(this.connected) {
 					vnc.close();
-					connect();
+					connect(false);
 				}
 			}
 			
@@ -35,11 +41,15 @@
 				trace('vnc connected');
 			}
 			
-			public function connect():Boolean {
+			public function connect(reset:Boolean = true):Boolean {
 				if(host == '' || password == '') {
 					Alert.show('Host or password not set!');
 					return false;
 				}
+				
+				//if(reset) {
+					resized = false;
+				//}
 				
 				vnc.host = this.host;
 				vnc.password = this.password;
@@ -58,6 +68,11 @@
 						lblVNCStatus.text = 'connected';
 						lblVNCStatus.setStyle('color', 0x01CF00);
 						connected = true;
+						
+						currentImageHeight = vnc.getScreenImage().height;
+						currentImageWidth = vnc.getScreenImage().width;
+						
+						resizeMe();
 					});
 				}
 				
@@ -155,6 +170,91 @@
 				var snapshot:BitmapData = new BitmapData(videoWidth, videoHeight, true);
 				snapshot.draw(vnc.getScreenImage(), m);
 				myWriter.saveFrame( snapshot );
+				
+			}
+			
+			override public function resizeMe():void {
+				var p:Tile = parent as Tile;
+				if(this.width != p.tileWidth && this.height != p.tileHeight) {
+					reconnect();
+					trace('image doesnt match - reconnect');
+				}
+				
+				if(!resized) {
+
+					resized = true;
+					
+					this.height = p.tileHeight;
+					this.width = p.tileWidth;					
+					
+					trace('setting new sizes');
+					trace(this.height);
+					trace(this.width);
+					
+					
+					
+					if(this.width > p.tileWidth && this.height > p.tileHeight) {
+						trace('image doesnt match - reconnect');
+						//reconnect();
+					}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
+						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+						trace('setting width to ' + this.width);
+						
+					} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
+						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+						trace('setting height to ' + this.height);
+						//reconnect();
+					}
+					
+					//reconnect();
+				}
+				
+				
+				/*
+				if(currentImageHeight != tmpImageHeight || currentImageWidth != tmpImageWidth) {
+					trace('size changed');
+					
+					var x:Tile = this.parent as Tile;
+					
+					if(this.width != x.tileWidth && this.height != x.tileHeight) {
+						vnc.close();
+						this.percentHeight = 100;
+						this.percentWidth = 100;
+						vnc.connect();
+						return;
+					}
+					
+					trace('setting new sizes');
+					if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
+						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+						trace('setting width to ' + this.width);
+						//this.percentWidth = 100;
+						//this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+						return;
+					}
+					
+					if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
+						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+						trace('setting height to ' + this.height);
+						//this.percentHeight = 100;
+						//this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+						return;
+					}
+					
+					tmpImageHeight = currentImageHeight;
+					tmpImageWidth = currentImageWidth;
+					
+				}
+				*/
+				/*
+				trace(Math.round((this.height*currentImageWidth)/currentImageHeight));
+				
+				if(this.height > currentImageHeight) {
+					
+					this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+					return;
+				}
+				*/
 			}
 		]]>
 	</mx:Script>
@@ -162,11 +262,11 @@
 	<mx:Fade id="fadeOut" duration="800" alphaFrom="1.0" alphaTo="0.0"/>
     <mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
 	
-	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off" borderColor="#0080D9">
 		
 		<ns1:FVNC 
 				id="vnc" left="0" right="0" fitToScreen="true" viewOnly="true" height="100%"
-				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" borderColor="#000000" borderThickness="1">
+				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" borderColor="#FF0000" borderThickness="1">
 		</ns1:FVNC>
 		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
 			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
