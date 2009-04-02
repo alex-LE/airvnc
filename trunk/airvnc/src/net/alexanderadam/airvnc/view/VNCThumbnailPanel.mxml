@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <comp:VNCPanel 
-	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resize()"
-	xmlns:ns1="fvnc.*" rollOver="{actionpanel.visible = true}" rollOut="{actionpanel.visible = false}"
+	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+	xmlns:ns1="fvnc.*" rollOver="{actionpanel.visible = true;titlepanel.visible = true}" rollOut="{actionpanel.visible = false;titlepanel.visible = false}"
 	creationComplete="init()" backgroundColor="#7C7C7C">
 	
 	<mx:Script>
@@ -14,6 +14,7 @@
 			import mx.controls.Alert;
 			import tw.helpers.flv.SimpleFlvWriter;
 			import fvnc.rfb.constants.ProtocolState;
+			import mx.containers.Tile;
 			
 			//instantiating our flv writer
 			private var myWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
@@ -29,6 +30,9 @@
 			private var reloadTimer:Timer;
 			
 			private var rec:Rectangle;
+			
+			public var currentImageHeight:Number;
+			public var currentImageWidth:Number;
 			
 			private function init():void {
 				if(host == '' || password == '') {
@@ -49,16 +53,14 @@
 				vnc.connect();
 				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
 				
-				//this.title = 'Thumbnail Session: ' + this.host;
-				
-				
+				titleCaption.text = 'Thumbnail Session: ' + this.host;				
 				
 				reloadTimer = new Timer(10000);
 				reloadTimer.addEventListener(TimerEvent.TIMER, reload);
 				reloadTimer.start();
 			}
 			
-			private function resize():void {
+			private function reconnect():void {
 				reload(new Event(TimerEvent.TIMER));
 			}
 			
@@ -106,7 +108,11 @@
 				thumb.data = vnc.getScreenImage();
 				lblVNCStatus.text = 'loaded';
 				rec = vnc.getScreenBounds();
+				currentImageHeight = vnc.getScreenImage().height;
+				currentImageWidth = vnc.getScreenImage().width;
 				vnc.close();
+				
+				resizeMe();
 			}
 			
 			private function changeTimer():void {
@@ -169,7 +175,29 @@
 			}
 			
 			override public function resizeMe():void {
+				var p:Tile = parent as Tile;
+				if(this.width != p.tileWidth && this.height != p.tileHeight) {
+					reconnect();
+					trace('image doesnt match - reconnect');
+				}
+								
+				this.height = p.tileHeight;
+				this.width = p.tileWidth;					
 				
+				trace('setting new sizes');
+				trace(this.height);
+				trace(this.width);					
+				
+				if(this.width > p.tileWidth && this.height > p.tileHeight) {
+					trace('image doesnt match - reconnect');
+				}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
+					this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+					trace('setting width to ' + this.width);
+					
+				} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
+					this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+					trace('setting height to ' + this.height);
+				}
 			}
 		]]>
 	</mx:Script>
@@ -179,6 +207,9 @@
 	
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:Image id="thumb" left="0" right="0" height="100%" width="100%" top="0" toolTip="Click me to enable a remote session" click="startLiveSession()"/>
+		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
+			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
+		</mx:Canvas>
 		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" alpha="0.7">
 			<mx:Label x="106.5" y="0" id="lblVNCStatus" text="disconnected"/>
 			<mx:HSlider x="101" y="15" id="timerInterval" width="183" minimum="5" maximum="120" value="10" snapInterval="1" change="changeTimer()"/>

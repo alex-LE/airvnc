@@ -24,15 +24,12 @@
 			public var currentImageHeight:Number;
 			public var currentImageWidth:Number;
 			
-			public var tmpImageHeight:Number;
-			public var tmpImageWidth:Number;
-			
 			private var resized:Boolean;
 			
 			private function reconnect():void {
 				if(this.connected) {
 					vnc.close();
-					connect(false);
+					connect();
 				}
 			}
 			
@@ -41,15 +38,13 @@
 				trace('vnc connected');
 			}
 			
-			public function connect(reset:Boolean = true):Boolean {
+			public function connect():Boolean {
 				if(host == '' || password == '') {
 					Alert.show('Host or password not set!');
 					return false;
 				}
 				
-				//if(reset) {
-					resized = false;
-				//}
+				resized = false;
 				
 				vnc.host = this.host;
 				vnc.password = this.password;
