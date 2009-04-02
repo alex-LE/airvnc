@@ -195,7 +195,6 @@
 					
 					if(this.width > p.tileWidth && this.height > p.tileHeight) {
 						trace('image doesnt match - reconnect');
-						//reconnect();
 					}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
 						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
 						trace('setting width to ' + this.width);
@@ -203,58 +202,8 @@
 					} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
 						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
 						trace('setting height to ' + this.height);
-						//reconnect();
 					}
-					
-					//reconnect();
 				}
-				
-				
-				/*
-				if(currentImageHeight != tmpImageHeight || currentImageWidth != tmpImageWidth) {
-					trace('size changed');
-					
-					var x:Tile = this.parent as Tile;
-					
-					if(this.width != x.tileWidth && this.height != x.tileHeight) {
-						vnc.close();
-						this.percentHeight = 100;
-						this.percentWidth = 100;
-						vnc.connect();
-						return;
-					}
-					
-					trace('setting new sizes');
-					if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
-						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
-						trace('setting width to ' + this.width);
-						//this.percentWidth = 100;
-						//this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
-						return;
-					}
-					
-					if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
-						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
-						trace('setting height to ' + this.height);
-						//this.percentHeight = 100;
-						//this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
-						return;
-					}
-					
-					tmpImageHeight = currentImageHeight;
-					tmpImageWidth = currentImageWidth;
-					
-				}
-				*/
-				/*
-				trace(Math.round((this.height*currentImageWidth)/currentImageHeight));
-				
-				if(this.height > currentImageHeight) {
-					
-					this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
-					return;
-				}
-				*/
 			}
 		]]>
 	</mx:Script>
