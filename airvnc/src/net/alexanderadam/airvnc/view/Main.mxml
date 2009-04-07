@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:ac="com.adobe.ac.*" xmlns:view="net.alexanderadam.airvnc.view.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:ac="com.adobe.ac.*" xmlns:view="net.alexanderadam.airvnc.view.*" xmlns:comp="net.alexanderadam.airvnc.view.components.*">
 	<mx:Script>
 		<![CDATA[
 			import mx.core.Application;
@@ -107,9 +107,15 @@
 	<ac:ObserveValue source="{modelLocator.resized}" handler="{resizeItems}" value="{true}"/>
 
 	<mx:Canvas width="100%" height="50" id="bar" styleName="bar" doubleClick="Application.application.maximize()" mouseDown="startMove()">
-		<mx:Button label="" click="{Application.application.close()}" right="10" top="10" width="20" height="19" labelPlacement="left" toolTip="close" icon="@Embed(source='../../../../assets/close.png')"/>
-		<mx:Button label="" click="{toogleMinimizeMaximize();}" id="btnMaximize" right="38" top="10" width="20" height="19" labelPlacement="left" toolTip="maximize" icon="@Embed(source='../../../../assets/max.png')"/>
-		<mx:Button label="" click="{Application.application.minimize();}" id="btnMinimize" right="66" top="10" width="20" height="19" labelPlacement="left" toolTip="minimize" icon="@Embed(source='../../../../assets/min.png')"/>
+		<mx:LinkButton label="" click="{Application.application.close()}" right="10" top="10" width="23" height="22" labelPlacement="left" toolTip="close" icon="@Embed(source='assets/close.png')" styleName="appTool"/>
+		<mx:LinkButton label="" click="{toogleMinimizeMaximize();}" id="btnMaximize" right="38" top="10" width="23" height="22" labelPlacement="left" toolTip="maximize" icon="@Embed(source='assets/max.png')" styleName="appTool"/>
+		<mx:LinkButton label="" click="{Application.application.minimize();}" id="btnMinimize" right="66" top="10" width="23" height="22" labelPlacement="left" toolTip="minimize" icon="@Embed(source='assets/min.png')" alpha="1.0" styleName="appTool"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/document-open.png')" label="Load XML" width="60" top="5" bottom="5" left="5" styleName="appTool" alpha="1.0"  textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/document-save-as.png')" label="Save XML" width="60" top="5" bottom="5" left="73" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="New Session" width="70" top="5" bottom="5" left="141" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/view-refresh.png')" label="Refresh Sessions" width="75" top="5" bottom="5" left="219" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/preferences-system.png')" label="Configure Settings" width="80" top="5" bottom="5" left="302" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="Full Screen" width="70" top="5" bottom="5" left="390" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>
 	</mx:Canvas>
 	
 	<mx:Tile 
