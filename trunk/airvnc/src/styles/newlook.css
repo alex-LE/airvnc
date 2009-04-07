@@ -38,14 +38,19 @@ Button {
    themeColor: #ffc600;
    fontFamily: Arial;   
 }
-Button.appTool
+LinkButton.appTool
 {
 	fontSize: 8px;
 	padding-left:0px;
 	padding-top:0px;
-	padding-right:0px;
+	padding-right:0;
 	padding-bottom:0px;
 	fontWeight:bold;
+	fillAlphas: 0.0, 0.0, 0.0, 0.0;
+	fillColors: #000000, #000000;
+	color: #595854;
+	themeColor: #969696;
+	textRollOverColor: #000000;
 }
 
 .closeBtn {
