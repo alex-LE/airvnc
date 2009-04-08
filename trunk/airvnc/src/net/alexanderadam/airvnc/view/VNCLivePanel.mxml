@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <comp:VNCPanel 
-	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resizeMe()"
 	xmlns:ns1="fvnc.*" backgroundColor="#7C7C7C" rollOver="{actionpanel.visible = true;titlepanel.visible = true}" rollOut="{actionpanel.visible = false;titlepanel.visible = false}"
 	creationComplete="init()">
 	<mx:Script>
@@ -35,7 +35,6 @@
 			
 			private function init():void {
 				connect();
-				trace('vnc connected');
 			}
 			
 			public function connect():Boolean {
@@ -169,14 +168,16 @@
 			}
 			
 			override public function resizeMe():void {
+				trace('resizeMe called');
+				
 				var p:Tile = parent as Tile;
 				if(this.width != p.tileWidth && this.height != p.tileHeight) {
-					reconnect();
 					trace('image doesnt match - reconnect');
+					reconnect();					
 				}
 				
 				if(!resized) {
-
+					
 					resized = true;
 					
 					this.height = p.tileHeight;

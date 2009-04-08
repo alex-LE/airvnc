@@ -162,7 +162,7 @@ VNCPanel {
 
 Canvas.bar
 {
-	background-image : Embed("assets/bar.png");
+	background-image : Embed(source="../assets/bar.png");
 	background-repeat: repeat;
 	borderSkin: ClassReference("com.degrafa.skins.CSSSkin");
 }

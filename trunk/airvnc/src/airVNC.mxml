@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication 
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="fvnc.*" xmlns:comp="components.*" 
-	applicationComplete="init()" width="800" height="600" resize="resizeHandler()" windowResize="resizeHandler()"
+	applicationComplete="init()" width="800" height="600" resize="resizeHandler()" windowResize="resizeHandler()" resizing="trace(event)"
 	xmlns:view="net.alexanderadam.airvnc.view.*"
 	xmlns:control="net.alexanderadam.airvnc.control.*"
 	xmlns:business="net.alexanderadam.airvnc.business.*"
@@ -10,7 +10,7 @@
 	showFlexChrome="false"
 	>
 	
-	<mx:Style source="styles/newlook.css"/>
+	<mx:Style source="net/alexanderadam/airvnc/view/styles/newlook.css"/>
 	<mx:Script>
 		<![CDATA[
 			import com.adobe.cairngorm.model.ModelLocator;
@@ -42,10 +42,11 @@
 			}
 			
 			private function resizeHandler():void {
-				if(modelLocator.itemsadded) {
+				trace('resizing');
+				/*if(modelLocator.itemsadded) {
 					var re:ResizeWindowEvent = new ResizeWindowEvent();
 					re.dispatch();
-				}
+				}*/
 			}
 		]]>
 	</mx:Script>
@@ -54,6 +55,8 @@
 	<control:MainController id="controller" />
 	<business:Services id="services" />
 	
-	<view:Main  backgroundColor="#676767"/>
+	<view:Main backgroundColor="#676767" height="100%" width="100%"/>
+	
+	<mx:Image right="0" bottom="0" height="7" width="7" source="net/alexanderadam/airvnc/view/assets/resize.png" mouseDown="{stage.nativeWindow.startResize()}" buttonMode="true" mouseEnabled="true" useHandCursor="true"/>
 	
 </mx:WindowedApplication>

@@ -25,7 +25,6 @@
 							Alert.show('Invalid Type!');
 							continue;
 						}
-						item
 						
 						vnc.password = Encryption.decrypt(item.@Password.toString(), modelLocator.key);
 						vnc.host = item.@Host.toString();
@@ -40,6 +39,7 @@
 			
 			private function resizeItems():void {
 				//trace('resizeItems called');
+				/*
 				if(modelLocator.itemsadded) {
 					//trace('resizing items');
 					
@@ -52,15 +52,16 @@
 					    potenz++;
 					}
 					
-					//trace('potenz: '+potenz);
-					//trace('total width: ' + Application.application.width);
+					trace('potenz: '+potenz);
+					trace('total app width: ' + Application.application.width);
+					trace('total tile width: ' + itemlist.width);
 					//trace('total height: ' + Application.application.height);
 					
-					var newwidth:int = Math.round((Application.application.width-(potenz*11))/potenz);
-					//trace('item width: ' + newwidth);
+					var newwidth:int = Math.floor((itemlist.width-(potenz+1)*6)/potenz);
+					trace('item width: ' + newwidth);
 					
-					var newheight:int = Math.round((((Application.application.height-bar.height)-(potenz*12))/potenz))
-					//trace('item height: ' + newheight);
+					var newheight:int = Math.floor((itemlist.height-(potenz+1)*6)/potenz);
+					trace('item height: ' + newheight);
 					
 					itemlist.tileWidth = newwidth;
 					//itemlist.tileHeight = Math.round(newwidth/(4/3));
@@ -75,10 +76,23 @@
 					
 					modelLocator.resized = false;
 				}
+				*/
+				/*
+				if(modelLocator.itemsadded) {
+					modelLocator.resized = false;
+				}
+				*/
 				var y:Object = itemlist.getChildren();
 				trace(y.toString());
 				for each(var item:VNCPanel in itemlist.getChildren()) {
-					item.resizeMe();
+					
+					// resize whole panel
+					//item.percentHeight = 100;
+					//item.percentWidth = 100;
+					//item.width = itemlist.tileWidth;
+					
+					// resize panel depending on image
+					//item.resizeMe();
 					//trace(item);
 				}
 			}
@@ -118,9 +132,10 @@
 		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="Full Screen" width="70" top="5" bottom="5" left="390" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>
 	</mx:Canvas>
 	
-	<mx:Tile 
-		id="itemlist" paddingBottom="5" paddingLeft="5" direction="horizontal"
-		paddingRight="5" paddingTop="5" left="0" right="0" top="52" bottom="0" borderStyle="solid" borderColor="#000000" backgroundColor="#676767"
-		horizontalAlign="center" verticalAlign="middle">
-	</mx:Tile>
+	<comp:AutoTile
+		id="itemlist" paddingBottom="3" paddingLeft="3" direction="horizontal"
+		paddingRight="3" paddingTop="3" left="0" right="0" top="52" bottom="0" borderStyle="none" backgroundColor="#676767"
+		horizontalAlign="center" verticalAlign="middle" verticalGap="5" horizontalGap="5">
+	</comp:AutoTile>
+	
 </mx:Canvas>
