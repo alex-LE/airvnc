@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Tile xmlns:mx="http://www.adobe.com/2006/mxml" direction="horizontal" resize="resizeItems()">
+	<mx:Script>
+		<![CDATA[
+			
+			override public function addChild(child:DisplayObject):DisplayObject {
+				// call original function
+				var result:DisplayObject = super.addChild(child);
+				
+				resizeItems();
+				
+				return result;
+			}
+			
+			private function resizeItems():void {
+				if(this.getChildren().length > 0) {
+					// calculate how many items per row
+					var potenz:int = 1;
+					while ((potenz*potenz) < this.getChildren().length) {
+					    potenz++;
+					}
+					
+					// for debugging
+					trace("total height: " + this.height);
+					trace("total width: " + this.width);
+					
+					var horizontalGap:int = parseInt(this.getStyle('horizontalGap'));
+					var verticalGap:int = parseInt(this.getStyle('verticalGap'));
+					
+					// calculate new item height and width
+					var newwidth:int = Math.floor((this.width-(potenz+1)*horizontalGap)/potenz);
+					trace('item width: ' + newwidth);
+					
+					var newheight:int = Math.floor((this.height-(potenz+1)*verticalGap)/potenz);
+					trace('item height: ' + newheight);
+					
+					// set new item width and height
+					this.tileWidth = newwidth;
+					this.tileHeight = newheight;
+					
+					// resize each item
+					for each(var item:Object in this.getChildren()) {
+						trace(item.toString());
+						// resize whole panel
+						item.percentHeight = 100;
+						item.percentWidth = 100;
+						//item.width = itemlist.tileWidth;
+						
+						// resize panel depending on image
+						//item.resizeMe();
+						//trace(item);
+					}
+				}
+			}
+			
+		]]>
+	</mx:Script>
+</mx:Tile>
