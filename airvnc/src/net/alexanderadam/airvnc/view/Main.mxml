@@ -8,13 +8,18 @@
 			import net.alexanderadam.airvnc.helper.Encryption;
 			import mx.controls.Alert;
 			import net.alexanderadam.airvnc.events.ResizeWindowEvent;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
 		
 			[Bindable]
 			public var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
 			
+			private var dialog:AddHost = new AddHost();
+			
 			private function updateList(value:XML):void {
 				trace('updateList called');
 				if(modelLocator.itemsadded) {
+					itemlist.removeAllChildren();
 					for each (var item:Object in value.Connection) {
 						var vnc:VNCPanel;
 						if(item.@type.toString() == 'thumb') {
@@ -114,6 +119,15 @@
 					//resizeItems();
             	}
             }
+            
+            private function showAddHost():void {
+            	dialog.addEventListener(CloseEvent.CLOSE, function():void {
+            		PopUpManager.removePopUp(dialog);
+
+            	});
+            	PopUpManager.addPopUp(dialog, this, true);
+                PopUpManager.centerPopUp(dialog);
+            }
 		]]>
 	</mx:Script>
 	
@@ -126,7 +140,7 @@
 		<mx:LinkButton label="" click="{Application.application.minimize();}" id="btnMinimize" right="66" top="10" width="23" height="22" labelPlacement="left" toolTip="minimize" icon="@Embed(source='assets/min.png')" alpha="1.0" styleName="appTool"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/document-open.png')" label="Load XML" width="60" top="5" bottom="5" left="5" styleName="appTool" alpha="1.0"  textAlign="left" enabled="false"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/document-save-as.png')" label="Save XML" width="60" top="5" bottom="5" left="73" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="New Session" width="70" top="5" bottom="5" left="141" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="New Session" width="70" top="5" bottom="5" left="141" styleName="appTool" alpha="1.0" textAlign="left" click="showAddHost()"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/view-refresh.png')" label="Refresh Sessions" width="75" top="5" bottom="5" left="219" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/preferences-system.png')" label="Configure Settings" width="80" top="5" bottom="5" left="302" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="Full Screen" width="70" top="5" bottom="5" left="390" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>

@@ -57,6 +57,6 @@
 	
 	<view:Main backgroundColor="#676767" height="100%" width="100%"/>
 	
-	<mx:Image right="0" bottom="0" height="7" width="7" source="net/alexanderadam/airvnc/view/assets/resize.png" mouseDown="{stage.nativeWindow.startResize()}" buttonMode="true" mouseEnabled="true" useHandCursor="true"/>
+	<mx:Image right="0" bottom="0" height="7" width="7" source="net/alexanderadam/airvnc/view/assets/resize.png" buttonMode="true" useHandCursor="true"/>
 	
 </mx:WindowedApplication>
