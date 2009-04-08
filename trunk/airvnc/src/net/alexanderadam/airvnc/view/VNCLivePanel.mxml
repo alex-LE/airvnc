@@ -168,7 +168,7 @@
 			}
 			
 			override public function resizeMe():void {
-				trace('resizeMe called');
+				//trace('resizeMe called');
 				
 				var p:Tile = parent as Tile;
 				if(this.width != p.tileWidth && this.height != p.tileHeight) {

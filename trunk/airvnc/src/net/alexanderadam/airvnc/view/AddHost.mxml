@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="358" height="274" title="Add a new Host" showCloseButton="true">
+	<mx:Script>
+		<![CDATA[
+			import net.alexanderadam.airvnc.events.AddHostEvent;
+			import mx.managers.PopUpManager;
+			
+		]]>
+	</mx:Script>
+	<mx:Form left="0" right="0" top="0" bottom="0">
+		<mx:FormItem label="Host" horizontalAlign="left" required="true">
+			<mx:TextInput id="txtHost"/>
+		</mx:FormItem>
+		<mx:FormItem label="Port" required="true">
+			<mx:TextInput id="txtPort" text="5900"/>
+		</mx:FormItem>
+		<mx:FormItem label="Password" horizontalAlign="left">
+			<mx:TextInput id="txtPassword"/>
+		</mx:FormItem>
+		<mx:FormItem label="Type" width="230" required="true">
+			<mx:RadioButtonGroup id="rgType"/>
+			<mx:RadioButton label="live" groupName="rgType" selected="true"/>
+			<mx:RadioButton label="thumb" groupName="rgType"/>
+		</mx:FormItem>
+		<mx:FormItem>
+			<mx:Button label="Create" click="{new AddHostEvent(txtHost.text, txtPort.text, txtPassword.text, rgType.selectedValue.toString()).dispatch();PopUpManager.removePopUp(this);}"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</mx:TitleWindow>
