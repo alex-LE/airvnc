@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoTile xmlns="net.alexanderadam.airvnc.view.components.*" xmlns:mx="http://www.adobe.com/2006/mxml" initialize="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			
+			import net.alexanderadam.airvnc.view.*;
+			import mx.controls.Alert;
+			import net.alexanderadam.airvnc.helper.Encryption;
+			import net.alexanderadam.airvnc.model.ViewModelLocator;
+			import mx.binding.utils.ChangeWatcher;
+			
+			[Bindable]
+			public var dataProvider:XML;
+			private var index:int = 0;
+			
+			private var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
+			
+			private var dataProviderWatcher:ChangeWatcher;
+			
+			public function init():void
+			{
+				trace('canWatch: ' + ChangeWatcher.canWatch(this, 'dataProvider'));
+				dataProviderWatcher = ChangeWatcher.watch(this, 'dataProvider', displayList);
+			}
+			
+			private function displayList(x:Object):void {
+				trace('display list called');
+				for each (var item:XML in this.dataProvider.Connection) {
+					
+					if(item.@id.toString() != '') {
+						continue;
+					}
+					
+					var vnc:VNCPanel;
+					
+					if(item.@type.toString() == 'thumb') {
+						vnc = new VNCThumbnailPanel();
+					} else if(item.@type.toString() == 'live') {
+						vnc = new VNCLivePanel();
+					} else {
+						Alert.show('Invalid Type!');
+						continue;
+					}
+					
+					vnc.id = 'item' + index;
+					item.@id = vnc.id;				
+					index++;
+					vnc.password = Encryption.decrypt(item.@Password.toString(), modelLocator.key);
+					vnc.host = item.@Host.toString();
+					vnc.initialize();
+					//vnc.addEventListener('VNCConnected', showImage);
+					this.addChild(vnc);
+				}
+			}
+			
+		]]>
+	</mx:Script>
+</AutoTile>

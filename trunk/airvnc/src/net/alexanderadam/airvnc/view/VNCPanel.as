@@ -19,6 +19,7 @@ package net.alexanderadam.airvnc.view
 			super();
 		}
 		
-		public function resizeMe():void {}	
+		public function resizeMe():void {}
+		public function reconnect():void {}
 	}
 }

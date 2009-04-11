@@ -5,11 +5,13 @@
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.containers.errors.ConstraintError;
 			import mx.containers.Tile;
 			import tw.helpers.flv.SimpleFlvWriter;
 			import mx.controls.Alert;
 			import mx.core.Window;
 			import fvnc.rfb.constants.ProtocolState;
+			import fvnc.errors.ConnectionError;
 			
 			//instantiating our flv writer
 			private var myWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
@@ -26,9 +28,13 @@
 			
 			private var resized:Boolean;
 			
-			private function reconnect():void {
+			override public function reconnect():void {
 				if(this.connected) {
-					vnc.close();
+					try {
+						vnc.close();
+					} catch(e:Error) {
+						
+					}
 					connect();
 				}
 			}
@@ -49,8 +55,15 @@
 				vnc.password = this.password;
 				titleCaption.text = 'Live Session: ' + this.host;
 				
-				vnc.connect();
-				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+				try {
+					vnc.connect();
+					vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+				} catch (e:ConnectionError) {
+					Alert.show(e.message);
+				} catch (e:Error) {
+					Alert.show(e.message);
+				}
+				
 				
 				lblVNCStatus.visible = true;
 				lblVNCStatus.text = 'connecting ...';
@@ -173,7 +186,7 @@
 				var p:Tile = parent as Tile;
 				if(this.width != p.tileWidth && this.height != p.tileHeight) {
 					trace('image doesnt match - reconnect');
-					reconnect();					
+					reconnect();
 				}
 				
 				if(!resized) {

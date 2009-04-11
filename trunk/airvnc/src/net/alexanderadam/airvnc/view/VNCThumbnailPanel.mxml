@@ -60,7 +60,7 @@
 				reloadTimer.start();
 			}
 			
-			private function reconnect():void {
+			override public function reconnect():void {
 				reload(new Event(TimerEvent.TIMER));
 			}
 			
@@ -177,7 +177,7 @@
 			override public function resizeMe():void {
 				var p:Tile = parent as Tile;
 				if(this.width != p.tileWidth && this.height != p.tileHeight) {
-					reconnect();
+					this.reconnect();
 					trace('image doesnt match - reconnect');
 				}
 								

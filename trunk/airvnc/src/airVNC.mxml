@@ -29,6 +29,7 @@
 			
 			include 'ApplicationUpdate.as';
 			
+			[Bindable]
 			private var modelLocator:ViewModelLocator = ViewModelLocator.getInstance();
 			
 			private function init():void {

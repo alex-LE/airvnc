@@ -2,6 +2,8 @@ package net.alexanderadam.airvnc.model
 {
 	import com.adobe.cairngorm.model.IModelLocator;
 	
+	import flash.filesystem.File;
+	
 	[Bindable]
 	public class ViewModelLocator implements IModelLocator
 	{
@@ -23,11 +25,15 @@ package net.alexanderadam.airvnc.model
 		}	
 	
 		// DEFINE YOUR VARIABLES HERE
-		public var itemlist:XML;
+		public var itemlist:XML = new XML('<servers></servers>');
 		public var resized:Boolean;
 		public var itemsadded:Boolean;
 		
 		public var isMaximized:Boolean = false;
+		
+		public var appTitle:String = 'airVNC';
+		
+		public var serversfile:String = File.applicationStorageDirectory.nativePath + File.separator + 'servers.xml';
 		
 		// key for password encryption
 		public var key:String = '545be77c7cbcf6b24eed68202763116c';
