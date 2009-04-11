@@ -24,8 +24,11 @@ package net.alexanderadam.airvnc.commands
 			newitem.@Password = Encryption.encrypt(e.password, modelLocator.key);
 			newitem.@type = e.viewtype;
 			
-			modelLocator.itemsadded = true;
 			modelLocator.itemlist.appendChild(newitem);
+			modelLocator.itemlist = modelLocator.itemlist.copy();
+			modelLocator.itemsadded = true;
+			modelLocator.appTitle += '*';
+			trace('new item added');
 		}
 		
 		public function result(event:Object):void {

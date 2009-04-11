@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Tile xmlns:mx="http://www.adobe.com/2006/mxml" direction="horizontal" resize="resizeItems()">
+<mx:Tile xmlns:mx="http://www.adobe.com/2006/mxml" direction="horizontal" resize="resizeItems()" xmlns:comp="com.mh.*" verticalScrollPolicy="off">
 	<mx:Script>
 		<![CDATA[
+			import net.alexanderadam.airvnc.view.VNCPanel;
 			
 			override public function addChild(child:DisplayObject):DisplayObject {
 				// call original function
@@ -21,6 +22,7 @@
 					}
 					
 					// for debugging
+					trace('AutoTile::resizeItems');
 					trace("total height: " + this.height);
 					trace("total width: " + this.width);
 					
@@ -38,16 +40,20 @@
 					this.tileWidth = newwidth;
 					this.tileHeight = newheight;
 					
+					trace('AutoTile::resizeItems - done');
+					
+					this.invalidateDisplayList();
+					
 					// resize each item
-					for each(var item:Object in this.getChildren()) {
-						trace(item.toString());
+					for each(var item:VNCPanel in this.getChildren()) {
+						//trace(item.toString());
 						// resize whole panel
 						item.percentHeight = 100;
 						item.percentWidth = 100;
 						//item.width = itemlist.tileWidth;
 						
 						// resize panel depending on image
-						//item.resizeMe();
+						item.reconnect();
 						//trace(item);
 					}
 				}

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cairngorm:ServiceLocator xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cairngorm="com.adobe.cairngorm.business.*">
-	<mx:HTTPService id="dataXML" url="servers.xml" resultFormat="e4x"/>
+	<mx:Script>
+		<![CDATA[
+			import net.alexanderadam.airvnc.model.ViewModelLocator;
+			[Bindable]
+			private var modellocator:ViewModelLocator = ViewModelLocator.getInstance();
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="dataXML" url="{modellocator.serversfile}" resultFormat="e4x"/>
 </cairngorm:ServiceLocator>

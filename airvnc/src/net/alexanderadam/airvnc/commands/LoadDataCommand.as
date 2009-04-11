@@ -28,7 +28,7 @@ package net.alexanderadam.airvnc.commands
 		public function result(event:Object):void {
 			modelLocator.itemsadded = true;
 			modelLocator.itemlist = event.result as XML;
-			
+			modelLocator.appTitle = 'airVNC - servers.xml';
 			trace('data loaded');
 		}
 		
