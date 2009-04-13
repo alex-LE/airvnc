@@ -9,13 +9,13 @@
 	</mx:Script>
 	<mx:Form left="0" right="0" top="0" bottom="0">
 		<mx:FormItem label="Host" horizontalAlign="left" required="true">
-			<mx:TextInput id="txtHost" text="192.168.0.193"/>
+			<mx:TextInput id="txtHost" text=""/>
 		</mx:FormItem>
 		<mx:FormItem label="Port" required="true">
 			<mx:TextInput id="txtPort" text="5900"/>
 		</mx:FormItem>
 		<mx:FormItem label="Password" horizontalAlign="left">
-			<mx:TextInput id="txtPassword" text="1234"/>
+			<mx:TextInput id="txtPassword" text="" displayAsPassword="true"/>
 		</mx:FormItem>
 		<mx:FormItem label="Type" width="230" required="true">
 			<mx:RadioButtonGroup id="rgType"/>
