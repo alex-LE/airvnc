@@ -192,12 +192,13 @@
 		<mx:LinkButton label="" click="{Application.application.close()}" right="10" top="10" width="23" height="22" labelPlacement="left" toolTip="close" icon="@Embed(source='assets/close.png')" styleName="appTool"/>
 		<mx:LinkButton label="" click="{toogleMinimizeMaximize();}" id="btnMaximize" right="38" top="10" width="23" height="22" labelPlacement="left" toolTip="maximize" icon="@Embed(source='assets/max.png')" styleName="appTool"/>
 		<mx:LinkButton label="" click="{Application.application.minimize();}" id="btnMinimize" right="66" top="10" width="23" height="22" labelPlacement="left" toolTip="minimize" icon="@Embed(source='assets/min.png')" alpha="1.0" styleName="appTool"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/document-open.png')" label="Load XML" width="60" top="5" bottom="5" left="5" styleName="appTool" alpha="1.0"  textAlign="left" click="showLoadDialog()"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/document-save-as.png')" label="Save XML" width="60" top="5" bottom="5" left="73" styleName="appTool" alpha="1.0" textAlign="left" click="saveXML()"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="New Session" width="70" top="5" bottom="5" left="141" styleName="appTool" alpha="1.0" textAlign="left" click="showAddHost()"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/view-refresh.png')" label="Refresh Sessions" width="75" top="5" bottom="5" left="219" styleName="appTool" alpha="1.0" textAlign="left" click="refreshAllSessions()"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/preferences-system.png')" label="Configure Settings" width="80" top="5" bottom="5" left="302" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="Full Screen" width="70" top="5" bottom="5" left="390" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/document-open.png')" label="" width="80" top="5" bottom="5" left="5" styleName="appTool" alpha="1.0"  textAlign="left" click="showLoadDialog()"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/document-save-as.png')" label="" width="80" top="5" bottom="5" left="93" styleName="appTool" alpha="1.0" textAlign="left" click="saveXML()"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="" width="80" top="5" bottom="5" left="181" styleName="appTool" alpha="1.0" textAlign="left" click="showAddHost()"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/view-refresh.png')" label="" width="80" top="5" bottom="5" left="269" styleName="appTool" alpha="1.0" textAlign="left" click="refreshAllSessions()"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/preferences-system.png')" label="" width="80" top="5" bottom="5" left="357" styleName="appTool" alpha="1.0" textAlign="left" enabled="false"/>
+		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="" width="80" top="5" bottom="5" left="445" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>
+		<mx:Image y="8" source="net/alexanderadam/airvnc/view/assets/logo.png" height="32" right="120"/>
 	</mx:Canvas>
 	
 	<comp:VNCTile

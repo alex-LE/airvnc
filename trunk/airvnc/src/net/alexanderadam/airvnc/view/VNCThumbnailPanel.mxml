@@ -84,9 +84,29 @@
 					handleIOError(ev);
 				}
 				vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+				vnc.getRFB().addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecError, false, 1);
 			}
 			
 			private function handleIOError(event:IOErrorEvent):void {
+				trace(event);
+				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
+				{
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				else
+				{
+					trace( event.text );
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				event.stopImmediatePropagation();
+			}
+			
+			private function handleSecError(event:SecurityErrorEvent):void {
+				trace(event);
 				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
 				{
 					lblVNCStatus.text = 'Could not connect';

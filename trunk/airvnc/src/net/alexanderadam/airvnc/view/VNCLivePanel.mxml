@@ -58,9 +58,11 @@
 				try {
 					vnc.connect();
 					vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
+					vnc.getRFB().addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecError, false, 1);
+					
 				} catch (e:ConnectionError) {
 					Alert.show(e.message);
-				} catch (e:Error) {
+				} catch (e:SecurityError) {
 					Alert.show(e.message);
 				}
 				
@@ -87,6 +89,28 @@
 			}
 			
 			private function handleIOError(event:IOErrorEvent):void {
+				trace(event);
+				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
+				{
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				else
+				{
+					trace( event.text );
+					lblVNCStatus.text = 'Could not connect';
+					lblVNCStatus.setStyle('color', 0xFF0000);
+					vnc.close();
+				}
+				btnConnect.label = 'Reconnect';
+				btnConnect.enabled = true;
+				connected = false;
+				event.stopImmediatePropagation();
+			}
+			
+			private function handleSecError(event:SecurityErrorEvent):void {
+				trace(event);
 				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
 				{
 					lblVNCStatus.text = 'Could not connect';
@@ -224,7 +248,8 @@
 		
 		<ns1:FVNC 
 				id="vnc" left="0" right="0" fitToScreen="true" viewOnly="true" height="100%"
-				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" borderColor="#FF0000" borderThickness="1">
+				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" 
+				borderColor="#FF0000" borderThickness="1">
 		</ns1:FVNC>
 		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
 			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
