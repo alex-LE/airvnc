@@ -15,6 +15,7 @@
 			import tw.helpers.flv.SimpleFlvWriter;
 			import fvnc.rfb.constants.ProtocolState;
 			import mx.containers.Tile;
+			import net.alexanderadam.airvnc.events.RemoveHostEvent;
 			
 			//instantiating our flv writer
 			private var myWriter:SimpleFlvWriter = SimpleFlvWriter.getInstance();
@@ -62,6 +63,10 @@
 			
 			override public function reconnect():void {
 				reload(new Event(TimerEvent.TIMER));
+			}
+			
+			override public function disconnect():void {
+				reloadTimer.stop();
 			}
 			
 			private function reload(e:Event):void {
@@ -219,6 +224,11 @@
 					trace('setting height to ' + this.height);
 				}
 			}
+			
+			private function removeMe():void {
+				disconnect();
+				new RemoveHostEvent(this.id).dispatch();
+			}
 		]]>
 	</mx:Script>
 	
@@ -228,7 +238,8 @@
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:Image id="thumb" left="0" right="0" height="100%" width="100%" top="0" toolTip="Click me to enable a remote session" click="startLiveSession()"/>
 		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
-			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
+			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>
+			<mx:LinkButton top="5" right="5" label="" width="24" height="24" icon="@Embed(source='assets/user-trash.png')" toolTip="remove this item" id="btnRemove" click="removeMe()"/>			
 		</mx:Canvas>
 		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" alpha="0.7">
 			<mx:Label x="106.5" y="0" id="lblVNCStatus" text="disconnected"/>

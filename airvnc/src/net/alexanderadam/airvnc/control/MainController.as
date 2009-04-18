@@ -18,10 +18,7 @@ package net.alexanderadam.airvnc.control
 			this.addCommand(ResizeWindowEvent.RESIZE_WINDOW, ResizeWindowCommand);
 			this.addCommand(LoadDataEvent.LOAD_DATA, LoadDataCommand);
 			this.addCommand(AddHostEvent.ADD_HOST, AddHostCommand);
-			
-			//this.addCommand(LoginEvent.LOGIN, LoginCommand);
-			//this.addCommand(LoadOverviewBusinessEvent.LOADOVERVIEWBUSINESS, LoadOverviewBusinessCommand);
-			//this.addCommand(LoadOrdersRevenuesEvent.LOADORDERSREVENUES, LoadOrdersRevenuesCommand);
+			this.addCommand(RemoveHostEvent.REMOVE_HOST, RemoveHostCommand);
 		}
 	}
 }

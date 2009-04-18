@@ -26,12 +26,16 @@
 			
 			private function displayList(x:Object):void {
 				trace('display list called');
+				
+				// remove all items
+				this.removeAllChildren();
+				
 				for each (var item:XML in this.dataProvider.Connection) {
-					
+					/*
 					if(item.@id.toString() != '') {
 						continue;
 					}
-					
+					*/
 					var vnc:VNCPanel;
 					
 					if(item.@type.toString() == 'thumb') {

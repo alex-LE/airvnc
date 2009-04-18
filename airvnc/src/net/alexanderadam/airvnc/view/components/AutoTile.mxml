@@ -52,6 +52,15 @@
 						item.percentWidth = 100;
 						//item.width = itemlist.tileWidth;
 						
+						// scale titlepanel
+						item.titlepanel.height = Math.round((10*this.height)/100);						// panel height
+						item.titleCaption.setStyle('fontSize', Math.round((30*item.titlepanel.height)/100));	// font size
+						trace(item.titlepanel.height);
+						
+						// scale actionpanel
+						item.actionpanel.height = Math.round((10*this.height)/100);						// panel height
+						trace(item.actionpanel.height);
+						
 						// resize panel depending on image
 						item.reconnect();
 						//trace(item);
