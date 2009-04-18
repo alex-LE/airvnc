@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="300" title="Configure Settings" showCloseButton="true">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import net.alexanderadam.airvnc.model.ViewModelLocator;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			private var modellocator:ViewModelLocator = ViewModelLocator.getInstance();
+			
+			private function setReloadAll():void {
+				modellocator.reloadall = chkReloadAll.selected;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:CheckBox id="chkReloadAll" x="10" y="10" label="autoreload all items every {modellocator.reloadall_time} minutes" change="setReloadAll()"/>
+	<mx:HSlider x="210" y="15" minimum="1" maximum="120" snapInterval="1" value="{modellocator.reloadall_time}"/>
+	<mx:Button x="10" y="228" label="Done" id="btnDone" click="PopUpManager.removePopUp(this)"/>
+	
+</mx:TitleWindow>

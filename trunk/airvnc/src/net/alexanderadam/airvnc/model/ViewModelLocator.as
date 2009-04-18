@@ -37,6 +37,13 @@ package net.alexanderadam.airvnc.model
 		
 		// key for password encryption
 		public var key:String = '545be77c7cbcf6b24eed68202763116c';
+		
+		// reload all items
+		public var reloadall:Boolean = false;
+		
+		// reload all items every 10min - by default - in minutes
+		public var reloadall_time:int = 10;
+		
 	}
 }
 

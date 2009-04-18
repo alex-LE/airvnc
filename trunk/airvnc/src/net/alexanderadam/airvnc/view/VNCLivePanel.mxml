@@ -5,6 +5,7 @@
 	creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import net.alexanderadam.airvnc.events.RemoveHostEvent;
 			import mx.containers.errors.ConstraintError;
 			import mx.containers.Tile;
 			import tw.helpers.flv.SimpleFlvWriter;
@@ -36,6 +37,16 @@
 						
 					}
 					connect();
+				}
+			}
+			
+			override public function disconnect():void {
+				if(this.connected) {
+					try {
+						vnc.close();
+					} catch(e:Error) {
+						
+					}
 				}
 			}
 			
@@ -205,11 +216,9 @@
 			}
 			
 			override public function resizeMe():void {
-				//trace('resizeMe called');
 				
 				var p:Tile = parent as Tile;
 				if(this.width != p.tileWidth && this.height != p.tileHeight) {
-					trace('image doesnt match - reconnect');
 					reconnect();
 				}
 				
@@ -220,23 +229,20 @@
 					this.height = p.tileHeight;
 					this.width = p.tileWidth;					
 					
-					trace('setting new sizes');
-					trace(this.height);
-					trace(this.width);
-					
-					
-					
 					if(this.width > p.tileWidth && this.height > p.tileHeight) {
 						trace('image doesnt match - reconnect');
 					}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
 						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
-						trace('setting width to ' + this.width);
 						
 					} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
 						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
-						trace('setting height to ' + this.height);
 					}
 				}
+			}
+			
+			private function removeMe():void {
+				disconnect();
+				new RemoveHostEvent(this.id).dispatch();
 			}
 		]]>
 	</mx:Script>
@@ -253,11 +259,12 @@
 		</ns1:FVNC>
 		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
 			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
+			<mx:LinkButton top="5" right="5" label="" width="24" height="24" icon="@Embed(source='assets/user-trash.png')" toolTip="remove this item" id="btnRemove" click="removeMe()"/>
 		</mx:Canvas>
 		<mx:Canvas id="actionpanel" x="0" width="100%" height="57" bottom="0" backgroundColor="#000000" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}" borderStyle="solid" borderColor="#9A9A9A" backgroundAlpha="0.6">
-			<mx:Button x="10" y="19" label="Disconnect" id="btnConnect" enabled="false" click="switchVNCStatus()"/>
-			<mx:Label x="106.5" y="1" id="lblVNCStatus" visible="true" text="disconnected"/>
-			<mx:Button x="214" y="19" label="Record" id="record_btn" click="recordVideo()"/>
+			<mx:Button top="10" label="Disconnect" id="btnConnect" enabled="false" click="switchVNCStatus()" left="10"/>
+			<mx:Label id="lblVNCStatus" visible="true" text="disconnected" horizontalCenter="0" top="10" fontSize="15"/>
+			<mx:Button top="10" right="10" label="Record" id="record_btn" click="recordVideo()"/>
 		</mx:Canvas>
 	</mx:Canvas>
 </comp:VNCPanel>

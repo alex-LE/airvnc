@@ -30,12 +30,12 @@ Label {
 Button {
    cornerRadius: 0;
    fillAlphas: 0.6, 0.85, 1, 1;
-   fillColors: #1e1e1e, #1e1e1e, #1e1e1e, #1e1e1e;
-   color: #ffc600;
-   textRollOverColor: #ffc600;
+   fillColors: #3d6ca9, #3d6ca9, #3d6ca9, #3d6ca9;
+   color: #ffffff;
+   textRollOverColor: #ffffff;
    textSelectedColor: #101010;
-   borderColor: #1e1e1e;
-   themeColor: #ffc600;
+   borderColor: #3d6ca9;
+   themeColor: #ffffff;
    fontFamily: Arial;   
 }
 LinkButton.appTool
@@ -87,22 +87,22 @@ Panel {
    fontFamily: Arial;
    fontWeight: bold;
 }
-/*
+
 CheckBox {
    fillAlphas: 1, 1, 1, 1;
-   fillColors: #1e1e1e, #1e1e1e, #ffffff, #eeeeee;
-   borderColor: #b7babc;
-   iconColor: #FFC600;
+   fillColors: #3d6ca9, #3d6ca9, #ffffff, #3d6ca9;
+   borderColor: #FFFFFF;
+   iconColor: #000000;
    disabledIconColor: #333333;
-   color: #cc9900;
-   textSelectedColor: #FFC600;
-   textRollOverColor: #FFC600;
-   iconRollOverColor: #1e1e1e;
+   color: #000000;
+   textSelectedColor: #000000;
+   textRollOverColor: #000000;
+   iconRollOverColor: #000000;
    themeColor: #101010;
    fontFamily: Arial;
    fontSize: 11;
 }
-
+/*
 
 Legend{
     color: #ffc600;
