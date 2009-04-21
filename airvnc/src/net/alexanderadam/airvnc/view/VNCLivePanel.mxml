@@ -2,9 +2,11 @@
 <comp:VNCPanel 
 	xmlns:comp="net.alexanderadam.airvnc.view.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" resize="resizeMe()"
 	xmlns:ns1="fvnc.*" backgroundColor="#7C7C7C" rollOver="{actionpanel.visible = true;titlepanel.visible = true}" rollOut="{actionpanel.visible = false;titlepanel.visible = false}"
-	creationComplete="init()">
+	creationComplete="init()" xmlns:flashlight="com.wizhelp.flashlight.viewer.*" xmlns:ac="com.adobe.ac.*">
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Image;
+			import flash.utils.setTimeout;
 			import net.alexanderadam.airvnc.events.RemoveHostEvent;
 			import mx.containers.errors.ConstraintError;
 			import mx.containers.Tile;
@@ -32,7 +34,7 @@
 			override public function reconnect():void {
 				if(this.connected) {
 					try {
-						vnc.close();
+						vnc.disconnect();
 					} catch(e:Error) {
 						
 					}
@@ -43,7 +45,7 @@
 			override public function disconnect():void {
 				if(this.connected) {
 					try {
-						vnc.close();
+						vnc.disconnect();
 					} catch(e:Error) {
 						
 					}
@@ -66,39 +68,39 @@
 				vnc.password = this.password;
 				titleCaption.text = 'Live Session: ' + this.host;
 				
-				try {
-					vnc.connect();
-					vnc.getRFB().addEventListener(IOErrorEvent.IO_ERROR, handleIOError, false, 1);
-					vnc.getRFB().addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSecError, false, 1);
-					
-				} catch (e:ConnectionError) {
-					Alert.show(e.message);
-				} catch (e:SecurityError) {
-					Alert.show(e.message);
-				}
-				
+				vnc.stage.quality = StageQuality.LOW;
+				vnc.connect();				
 				
 				lblVNCStatus.visible = true;
 				lblVNCStatus.text = 'connecting ...';
 				lblVNCStatus.setStyle('color', 0x01CF00);
-				if(vnc.hasEventListener('VNCConnected') == false) {
-					vnc.addEventListener('VNCConnected', function():void {
-						btnConnect.label = 'Disconnect';
-						btnConnect.enabled = true;
-						lblVNCStatus.text = 'connected';
-						lblVNCStatus.setStyle('color', 0x01CF00);
-						connected = true;
-						
-						currentImageHeight = vnc.getScreenImage().height;
-						currentImageWidth = vnc.getScreenImage().width;
-						
-						resizeMe();
-					});
-				}
+				//setTimeout(checkForConnection, 1000);
 				
 				return true;
 			}
 			
+			private function startConnectionCheck():void {
+				setTimeout(checkForConnection, 1000);
+			}
+			
+			private function checkForConnection():void {
+				if(vnc && vnc.connected && vnc.source) {
+					btnConnect.label = 'Disconnect';
+					btnConnect.enabled = true;
+					lblVNCStatus.text = 'connected';
+					lblVNCStatus.setStyle('color', 0x01CF00);
+					connected = true;
+					
+					//currentImageHeight = vnc.getScreenImage().height;
+					//currentImageWidth = vnc.getScreenImage().width;
+					currentImageHeight = vnc.captureCurrentImage().height;
+					currentImageWidth = vnc.captureCurrentImage().width;
+					
+					resizeMe();
+				}
+			}
+			
+			/*
 			private function handleIOError(event:IOErrorEvent):void {
 				trace(event);
 				if ( vnc.getState() == ProtocolState.NOT_CONNECTED )
@@ -140,13 +142,13 @@
 				connected = false;
 				event.stopImmediatePropagation();
 			}
-			
+			*/
 			private function switchVNCStatus():void {
 				btnConnect.enabled = false;
 				if(connected) {
 					btnConnect.label = 'Connect';
 					lblVNCStatus.text = 'disconnected';
-					vnc.close();
+					vnc.disconnect();
 					connected = false;
 					btnConnect.enabled = true;
 				} else {
@@ -155,6 +157,7 @@
 			}
 			
 			private function startLiveSession():void {
+			/*	
 				// close current session
 				if(this.connected) {
 					vnc.close();
@@ -178,6 +181,7 @@
 				livevnc.percentWidth = 100;
 				livevnc.percentHeight = 100;
 				livevnc.connect();
+			*/
 			}
 			
 			private function recordVideo():void {
@@ -201,8 +205,7 @@
 			}
 			
 			private function recordVid():void {
-				var rec:Rectangle = vnc.getScreenBounds();
-				
+				var rec:Rectangle = vnc.getBounds(this);
 				
 				var m:Matrix = new Matrix();
 			 	var sx:Number =  videoWidth / rec.width;
@@ -210,7 +213,7 @@
 			 	m.scale(sx, sy);
 				
 				var snapshot:BitmapData = new BitmapData(videoWidth, videoHeight, true);
-				snapshot.draw(vnc.getScreenImage(), m);
+				snapshot.draw(vnc.content, m);
 				myWriter.saveFrame( snapshot );
 				
 			}
@@ -249,14 +252,30 @@
 	
 	<mx:Fade id="fadeOut" duration="800" alphaFrom="1.0" alphaTo="0.0"/>
     <mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
+    
+    <ac:ObserveValue source="{vnc.connected}" handler="{startConnectionCheck}" value="{true}"/>
 	
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off" borderColor="#0080D9">
 		
+		<!--
 		<ns1:FVNC 
 				id="vnc" left="0" right="0" fitToScreen="true" viewOnly="true" height="100%"
 				top="0" width="100%" toolTip="Click me to enable a remote session" click="startLiveSession()" 
 				borderColor="#FF0000" borderThickness="1">
 		</ns1:FVNC>
+		-->
+		
+		<flashlight:Viewer id="vnc"  width="100%" height="100%"
+			horizontalAlign="center" verticalAlign="middle"
+			host="192.168.0.193"
+			port="5900"
+			securityPort="-1"
+			password="1234"
+			shared="false"
+			viewOnly="true"
+			top="0" left="0"
+			toolTip="Click me to enable a remote session"/>
+		
 		<mx:Canvas id="titlepanel" width="100%" x="0" y="0" height="40" backgroundColor="#000000" borderColor="#9A9A9A" borderStyle="solid" backgroundAlpha="0.6" visible="false" hideEffect="{fadeOut}" showEffect="{fadeIn}">
 			<mx:Label x="10" y="7" text="" color="#EAEAEA" fontSize="16" fontWeight="bold" fontFamily="Arial" id="titleCaption"/>			
 			<mx:LinkButton top="5" right="5" label="" width="24" height="24" icon="@Embed(source='assets/user-trash.png')" toolTip="remove this item" id="btnRemove" click="removeMe()"/>
