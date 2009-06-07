@@ -30,12 +30,12 @@
             		trace('restore app');
             		Application.application.restore();
             		modelLocator.isMaximized = false;
-					//resizeItems();
+					refreshAllSessions();
             	} else {
             		trace('maximize app');
             		Application.application.maximize();
             		modelLocator.isMaximized = true;
-					//resizeItems();
+					refreshAllSessions();
             	}
             }
             
@@ -49,9 +49,16 @@
             }
             
             private function refreshAllSessions():void {
+            	/*
             	for each(var item:VNCPanel in itemlist.getChildren()) {
             		item.reconnect();
             	}
+            	*/
+            	itemlist.removeAllChildren();
+            	var tmp:XML = modelLocator.itemlist.copy();
+            	modelLocator.itemlist = new XML();
+            	modelLocator.itemlist = tmp;
+				modelLocator.itemsadded = true;
             }
             
             private function saveXML():void {
@@ -130,7 +137,7 @@
 		<comp:MultiLineButton icon="@Embed(source='assets/window-new.png')" label="" width="80" top="5" bottom="5" left="181" styleName="appTool" alpha="1.0" textAlign="left" click="showAddHost()"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/view-refresh.png')" label="" width="80" top="5" bottom="5" left="269" styleName="appTool" alpha="1.0" textAlign="left" click="refreshAllSessions()"/>
 		<comp:MultiLineButton icon="@Embed(source='assets/preferences-system.png')" label="" width="80" top="5" bottom="5" left="357" styleName="appTool" alpha="1.0" textAlign="left" click="showConfigureSettings()"/>
-		<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="" width="80" top="5" bottom="5" left="445" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>
+		<!--<comp:MultiLineButton icon="@Embed(source='assets/video-display.png')" label="" width="80" top="5" bottom="5" left="445" styleName="appTool" alpha="1.0" textAlign="left" click="{stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE}"/>-->
 		<mx:Image y="8" source="net/alexanderadam/airvnc/view/assets/logo.png" height="32" right="120"/>
 	</mx:Canvas>
 	

@@ -72,13 +72,14 @@
 				
 				resized = false;
 				
+				/*
 				vnc = new Viewer();
 				vnc.port = 5900;
 				vnc.securityPort = -1;
-				vnc.shared = false;
+				vnc.shared = true;
 				vnc.viewOnly = true;
 				vnc.initialize();
-				
+				*/
 				/*
 				horizontalAlign="center" verticalAlign="middle"
 				port="5900"
@@ -106,9 +107,9 @@
 			}
 			
 			private function checkForConnection():void {
-				trace('checking connection...');
+				//trace('checking connection...');
 				if(vnc && vnc.connected && vnc.source) {
-					trace('connection found');
+					//trace('connection found');
 					btnConnect.label = 'Disconnect';
 					btnConnect.enabled = true;
 					lblVNCStatus.text = 'connected';
@@ -240,26 +241,28 @@
 			}
 			
 			override public function resizeMe():void {
-				
-				var p:Tile = parent as Tile;
-				if(this.width != p.tileWidth && this.height != p.tileHeight) {
-					reconnect();
-				}
-				
-				if(!resized) {
+				//trace('resize me called');
+				var p:Tile = this.parent as Tile;
+				if(p) {
+					if(this.width != p.tileWidth && this.height != p.tileHeight) {
+						reconnect();
+					}
 					
-					resized = true;
-					
-					this.height = p.tileHeight;
-					this.width = p.tileWidth;					
-					
-					if(this.width > p.tileWidth && this.height > p.tileHeight) {
-						trace('image doesnt match - reconnect');
-					}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
-						this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+					if(!resized) {
 						
-					} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
-						this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+						resized = true;
+						
+						this.height = p.tileHeight;
+						this.width = p.tileWidth;					
+						
+						if(this.width > p.tileWidth && this.height > p.tileHeight) {
+							trace('image doesnt match - reconnect');
+						}else if(this.width > Math.round((this.height*currentImageWidth)/currentImageHeight)) {
+							this.width = Math.round((this.height*currentImageWidth)/currentImageHeight);
+							
+						} else if(this.height > Math.round((this.width*currentImageHeight)/currentImageWidth)) {
+							this.height = Math.round((this.width*currentImageHeight)/currentImageWidth);
+						}
 					}
 				}
 			}
@@ -288,7 +291,7 @@
 			horizontalAlign="center" verticalAlign="middle"
 			port="5900"
 			securityPort="-1"
-			shared="false"
+			shared="true"
 			viewOnly="true"
 			top="0" left="0"
 			toolTip="Click me to enable a remote session"/>

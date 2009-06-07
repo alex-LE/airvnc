@@ -91,7 +91,7 @@ Panel {
 CheckBox {
    fillAlphas: 1, 1, 1, 1;
    fillColors: #3d6ca9, #3d6ca9, #ffffff, #3d6ca9;
-   borderColor: #FFFFFF;
+   borderColor: #000000;
    iconColor: #000000;
    disabledIconColor: #333333;
    color: #000000;
