@@ -87,7 +87,7 @@ Panel {
    fontFamily: Arial;
    fontWeight: bold;
 }
-
+/*
 CheckBox {
    fillAlphas: 1, 1, 1, 1;
    fillColors: #3d6ca9, #3d6ca9, #ffffff, #3d6ca9;

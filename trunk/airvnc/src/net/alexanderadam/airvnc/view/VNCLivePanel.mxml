@@ -5,6 +5,8 @@
 	creationComplete="init()" xmlns:flashlight="com.wizhelp.flashlight.viewer.*" xmlns:ac="com.adobe.ac.*">
 	<mx:Script>
 		<![CDATA[
+			import flash.utils.clearInterval;
+			import flash.utils.setInterval;
 			import mx.controls.Image;
 			import flash.utils.setTimeout;
 			import net.alexanderadam.airvnc.events.RemoveHostEvent;
@@ -31,21 +33,27 @@
 			
 			private var resized:Boolean;
 			
+			private var connection_watch:uint;
+			
 			override public function reconnect():void {
 				if(this.connected) {
 					try {
 						vnc.disconnect();
 					} catch(e:Error) {
-						
-					}
-					connect();
+						trace(e.message);
+					}					
 				}
+				setTimeout(connect,1000);
 			}
 			
 			override public function disconnect():void {
 				if(this.connected) {
 					try {
+						btnConnect.label = 'Connect';
+						lblVNCStatus.text = 'disconnected';
 						vnc.disconnect();
+						connected = false;
+						btnConnect.enabled = true;
 					} catch(e:Error) {
 						
 					}
@@ -64,32 +72,49 @@
 				
 				resized = false;
 				
+				vnc = new Viewer();
+				vnc.port = 5900;
+				vnc.securityPort = -1;
+				vnc.shared = false;
+				vnc.viewOnly = true;
+				vnc.initialize();
+				
+				/*
+				horizontalAlign="center" verticalAlign="middle"
+				port="5900"
+				securityPort="-1"
+				shared="false"
+				viewOnly="true"
+				top="0" left="0"
+				toolTip="Click me to enable a remote session"
+				*/
+				
 				vnc.host = this.host;
 				vnc.password = this.password;
 				titleCaption.text = 'Live Session: ' + this.host;
 				
-				vnc.stage.quality = StageQuality.LOW;
+				//vnc.stage.quality = StageQuality.LOW;
 				vnc.connect();				
 				
 				lblVNCStatus.visible = true;
 				lblVNCStatus.text = 'connecting ...';
 				lblVNCStatus.setStyle('color', 0x01CF00);
 				//setTimeout(checkForConnection, 1000);
+				connection_watch = setInterval(checkForConnection, 500);
 				
 				return true;
 			}
 			
-			private function startConnectionCheck():void {
-				setTimeout(checkForConnection, 1000);
-			}
-			
 			private function checkForConnection():void {
+				trace('checking connection...');
 				if(vnc && vnc.connected && vnc.source) {
+					trace('connection found');
 					btnConnect.label = 'Disconnect';
 					btnConnect.enabled = true;
 					lblVNCStatus.text = 'connected';
 					lblVNCStatus.setStyle('color', 0x01CF00);
 					connected = true;
+					clearInterval(connection_watch);
 					
 					//currentImageHeight = vnc.getScreenImage().height;
 					//currentImageWidth = vnc.getScreenImage().width;
@@ -146,11 +171,7 @@
 			private function switchVNCStatus():void {
 				btnConnect.enabled = false;
 				if(connected) {
-					btnConnect.label = 'Connect';
-					lblVNCStatus.text = 'disconnected';
-					vnc.disconnect();
-					connected = false;
-					btnConnect.enabled = true;
+					disconnect();
 				} else {
 					connect();
 				}
@@ -253,8 +274,6 @@
 	<mx:Fade id="fadeOut" duration="800" alphaFrom="1.0" alphaTo="0.0"/>
     <mx:Fade id="fadeIn" duration="800" alphaFrom="0.0" alphaTo="1.0"/>
     
-    <ac:ObserveValue source="{vnc.connected}" handler="{startConnectionCheck}" value="{true}"/>
-	
 	<mx:Canvas id="content" width="100%" height="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off" borderColor="#0080D9">
 		
 		<!--
@@ -265,12 +284,10 @@
 		</ns1:FVNC>
 		-->
 		
-		<flashlight:Viewer id="vnc"  width="100%" height="100%"
+		<flashlight:Viewer id="vnc" width="100%" height="100%"
 			horizontalAlign="center" verticalAlign="middle"
-			host="192.168.0.193"
 			port="5900"
 			securityPort="-1"
-			password="1234"
 			shared="false"
 			viewOnly="true"
 			top="0" left="0"
