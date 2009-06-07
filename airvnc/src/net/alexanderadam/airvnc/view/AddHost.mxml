@@ -37,8 +37,8 @@
 		</mx:FormItem>
 		<mx:FormItem label="Type" width="230" required="true">
 			<mx:RadioButtonGroup id="rgType"/>
-			<mx:RadioButton label="live" groupName="rgType" selected="true"/>
-			<mx:RadioButton label="thumb" groupName="rgType"/>
+			<mx:RadioButton label="live" groupName="rgType" selected="true" color="#000000"/>
+			<mx:RadioButton label="thumb" groupName="rgType" color="#000000"/>
 		</mx:FormItem>
 		<mx:FormItem>
 			<mx:Button label="Create" click="addHost()" id="btnAddHost"/>
